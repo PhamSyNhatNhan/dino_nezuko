@@ -35,6 +35,13 @@ public class GameManager : MonoBehaviour
     private int highScore;
     private int curScore = 0;
     
+    // // Properties to access private fields for testing
+    // public GameObject ScoreObject { get => scoreObject; }
+    public GameObject GameOverUI { get => gameOverUI; }
+    public GameObject GameStartUI { get => gameStartUI; }
+    public int CurScore { get => curScore; set => curScore = value; }
+    public bool IsGameStart { get => isGameStart; set => isGameStart = value; }
+    
     void Start()
     {
         saveFilePath = Application.persistentDataPath + "/savefile.json";
@@ -108,9 +115,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void getLoadData()
+    {
+        LoadData();
+    }
+    
     public void newGame()
     {
         GameObject.Find("Background").transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        GameObject.Find("Player").transform.position = new Vector3(-4.61f, 0.08985914f, 0);
         Time.timeScale = 1f;
         gameSpeed = 1.0f;
         enemySpawn = StartCoroutine(spawnEnemy());
@@ -142,10 +155,20 @@ public class GameManager : MonoBehaviour
         get => gameSpeed;
         set => gameSpeed = value;
     }
-
-    public bool IsGameStart
+    
+    public void SetGameOverUIActive(bool active)
     {
-        get => isGameStart;
-        set => isGameStart = value;
+        gameOverUI.SetActive(active);
+    }
+
+    public void generateEnemy()
+    {
+        Instantiate(enemyObject1, GameObject.Find("Player").transform.position, spawnLocation.rotation);
+    }
+
+    public List<GameObject> EnemyList
+    {
+        get => enemyList;
+        set => enemyList = value;
     }
 }
